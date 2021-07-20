@@ -6,6 +6,12 @@ import br.com.zup.orange.projetozupspring1.modelo.Aluno;
 import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
 import br.com.zup.orange.projetozupspring1.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +31,25 @@ public class AlunoController {
 
     @Autowired
     private AlunoService alunoService;
+
+    @GetMapping
+    @Cacheable(value = "listaDeAlunos")
+    public Page<AlunoDto>  lista(@RequestParam(required = false) String nome,
+                                 @PageableDefault(sort = "id",
+                                         direction = Sort.Direction.ASC,
+                                         page = 0,
+                                         size = 100) Pageable paginacao) {
+
+        Page<Aluno> alunoList;
+
+        if(nome ==null) {
+            alunoList = alunoRepository.findAll(paginacao);
+        } else {
+            alunoList = alunoRepository.findByNome(nome, paginacao);
+        }
+
+        return AlunoDto.converter(alunoList);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AlunoDto> detalhar(@PathVariable Long id) {
@@ -38,6 +64,7 @@ public class AlunoController {
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = "listaDeAlunos", allEntries = true)
     public ResponseEntity<AlunoDto> cadastrar(@RequestBody @Valid AlunoForm alunoForm, UriComponentsBuilder uriBuilder){
 
         Aluno aluno = alunoService.cadastra(alunoForm);
