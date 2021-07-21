@@ -1,5 +1,7 @@
 package br.com.zup.orange.projetozupspring1.form;
 
+import br.com.zup.orange.projetozupspring1.modelo.Aluno;
+import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
 import br.com.zup.orange.projetozupspring1.valiacao.ValidaNascMenor18;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,5 +44,14 @@ public class AlunoForm {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public Aluno toEntity() {
+        Aluno aluno = new Aluno();
+        aluno.setNome(this.getNome());
+        aluno.setEmail(this.getEmail());
+        aluno.setDataNascimento(this.getDataNascimento());
+
+        return aluno;
     }
 }

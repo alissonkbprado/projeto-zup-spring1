@@ -46,6 +46,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/aluno").permitAll()
                 .antMatchers(HttpMethod.GET, "/aluno/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/resposta").hasRole("MENTOR")
+                .antMatchers(HttpMethod.POST, "/resposta").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .anyRequest().authenticated() // Qualquer outra requisição deverá ser autenticadas
                 .and().csrf().disable() //desabilitar verificação de segunrançã desnecessária em autenticações sem sessão

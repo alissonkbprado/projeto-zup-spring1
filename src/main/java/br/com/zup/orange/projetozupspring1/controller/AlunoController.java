@@ -4,10 +4,10 @@ import br.com.zup.orange.projetozupspring1.dto.AlunoDto;
 import br.com.zup.orange.projetozupspring1.form.AlunoForm;
 import br.com.zup.orange.projetozupspring1.modelo.Aluno;
 import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
-import br.com.zup.orange.projetozupspring1.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,9 +27,6 @@ public class AlunoController {
 
     @Autowired
     private AlunoRepository alunoRepository;
-
-    @Autowired
-    private AlunoService alunoService;
 
     @GetMapping
     @Cacheable(value = "listaDeAlunos")
@@ -62,16 +58,20 @@ public class AlunoController {
         }
     }
 
+    @CacheEvict(value = "listaDeAlunos", allEntries = true)
     @PostMapping
     @Transactional
-    @CacheEvict(value = "listaDeAlunos", allEntries = true)
     public ResponseEntity<AlunoDto> cadastrar(@RequestBody @Valid AlunoForm alunoForm, UriComponentsBuilder uriBuilder){
 
-        Aluno aluno = alunoService.cadastra(alunoForm);
+        Aluno aluno = alunoForm.toEntity();
+
+        alunoRepository.save(aluno);
 
         URI uri = uriBuilder.path("/aluno/{id}").buildAndExpand(aluno.getId()).toUri();
         return ResponseEntity.created(uri).body(new AlunoDto(aluno));
 
     }
+
+
 
 }
