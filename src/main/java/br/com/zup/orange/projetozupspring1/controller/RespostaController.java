@@ -77,7 +77,7 @@ public class RespostaController {
             System.out.println("Teste envio de email: " + aluno.getEmail());
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
 
     }
 

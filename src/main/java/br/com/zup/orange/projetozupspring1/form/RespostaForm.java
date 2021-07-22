@@ -68,15 +68,12 @@ public class RespostaForm {
     }
 
     public boolean verifica(AlunoRepository alunoRepository, AvaliacaoRepository avaliacaoRepository) {
-        Optional<Aluno> aluno = alunoRepository.findById(this.idAluno);
-        Optional<Avaliacao> avaliacao = avaliacaoRepository.findById(this.idAvaliacao);
 
-        if(!aluno.isPresent() || !avaliacao.isPresent()){
+        if(!alunoRepository.existsById(this.idAluno) || !avaliacaoRepository.existsById(this.idAvaliacao)){
             return false;
         }
 
         return true;
-
     }
 }
 
