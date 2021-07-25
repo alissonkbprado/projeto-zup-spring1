@@ -8,8 +8,6 @@ import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
 import br.com.zup.orange.projetozupspring1.repository.AvaliacaoRepository;
 import br.com.zup.orange.projetozupspring1.repository.RespostaRepository;
 import br.com.zup.orange.projetozupspring1.service.EnviaEmail;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/resposta")

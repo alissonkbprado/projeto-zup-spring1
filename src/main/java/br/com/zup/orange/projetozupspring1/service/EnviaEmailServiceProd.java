@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("prod")
-@Qualifier("enviaEmailProdPadrao")
+@Profile(value = {"prod", "test"})
 public class EnviaEmailServiceProd implements EnviaEmail {
 
     public void envia(String email){
