@@ -27,29 +27,31 @@ import java.util.List;
 @RequestMapping("/resposta")
 public class RespostaController {
 
-    @Autowired
     private RespostaRepository respostaRepository;
-
-    @Autowired
     private AlunoRepository alunoRepository;
-
-    @Autowired
     private Environment environment;
-
-    @Autowired
     private AvaliacaoRepository avaliacaoRepository;
-
-    @Autowired
     private EnviaEmail enviaEmail;
+
+    public RespostaController(RespostaRepository respostaRepository,
+                              AlunoRepository alunoRepository,
+                              Environment environment,
+                              AvaliacaoRepository avaliacaoRepository,
+                              EnviaEmail enviaEmail) {
+        this.respostaRepository = respostaRepository;
+        this.alunoRepository = alunoRepository;
+        this.environment = environment;
+        this.avaliacaoRepository = avaliacaoRepository;
+        this.enviaEmail = enviaEmail;
+    }
 
     @GetMapping
     public Page<RespostaTodosDto>  lista(@PageableDefault(sort = "id",
                                          direction = Sort.Direction.ASC,
                                          page = 0,
                                          size = 100) Pageable paginacao) {
-        Page<Resposta> respostaList;
 
-        respostaList = respostaRepository.findAll(paginacao);
+        Page<Resposta> respostaList = respostaRepository.findAll(paginacao);
 
         return RespostaTodosDto.converter(respostaList);
     }
@@ -58,9 +60,9 @@ public class RespostaController {
     @Transactional
     public ResponseEntity<?> cadastrar(@RequestBody @Valid RespostaForm respostaForm){
 
-        Boolean dadosOk = respostaForm.verifica(alunoRepository, avaliacaoRepository);
+        Boolean existeAlunoEAvaliacao = respostaForm.verifica(alunoRepository, avaliacaoRepository);
 
-        if(!dadosOk){
+        if(!existeAlunoEAvaliacao){
             return ResponseEntity.badRequest().build();
         }
 
@@ -68,21 +70,14 @@ public class RespostaController {
 
         respostaRepository.save(resposta);
 
-        List<String> profile = Arrays.asList(environment.getActiveProfiles());
-
         Aluno aluno = alunoRepository.findById(resposta.getAluno().getId()).get();
-
 
         enviaEmail.envia(aluno.getEmail());
 
-//        if(profile.contains("prod")){
-//            enviaEmailService.envia(aluno.getEmail());
-//        } else {
-//            System.out.println("Teste envio de email: " + aluno.getEmail());
-//        }
-
         return ResponseEntity.status(201).build();
 
+//        Teste busca pelo Profile
+//        List<String> profile = Arrays.asList(environment.getActiveProfiles());
     }
 
 }

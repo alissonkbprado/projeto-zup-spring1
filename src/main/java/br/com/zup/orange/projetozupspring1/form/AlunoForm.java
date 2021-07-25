@@ -1,7 +1,6 @@
 package br.com.zup.orange.projetozupspring1.form;
 
 import br.com.zup.orange.projetozupspring1.modelo.Aluno;
-import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
 import br.com.zup.orange.projetozupspring1.valiacao.ValidaNascMenor18;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,28 +21,22 @@ public class AlunoForm {
     @ValidaNascMenor18
     private LocalDate dataNascimento;
 
-    public String getNome() {
-        return nome;
+    public AlunoForm(String nome, String email, LocalDate dataNascimento) {
+        this.nome = nome;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getNome() {
+        return nome;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public LocalDate getDataNascimento() {
         return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public Aluno toEntity() {

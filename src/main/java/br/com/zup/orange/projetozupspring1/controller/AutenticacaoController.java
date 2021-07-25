@@ -4,7 +4,6 @@ import br.com.zup.orange.projetozupspring1.config.security.GeraTokenService;
 import br.com.zup.orange.projetozupspring1.dto.TokenDTO;
 import br.com.zup.orange.projetozupspring1.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,11 +22,13 @@ import javax.validation.Valid;
 @Profile("prod")
 public class AutenticacaoController {
 
-    @Autowired
     private AuthenticationManager authManager;
-
-    @Autowired
     private GeraTokenService geraTokenService;
+
+    public AutenticacaoController(AuthenticationManager authManager, GeraTokenService geraTokenService) {
+        this.authManager = authManager;
+        this.geraTokenService = geraTokenService;
+    }
 
     //Método para implementar a lógica de autenticação
     @PostMapping

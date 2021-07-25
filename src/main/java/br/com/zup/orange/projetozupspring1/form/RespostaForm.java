@@ -8,12 +8,9 @@ import br.com.zup.orange.projetozupspring1.repository.AvaliacaoRepository;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 public class RespostaForm {
-
 
     @NotNull
     @NumberFormat
@@ -28,28 +25,22 @@ public class RespostaForm {
     @NumberFormat
     String descricao;
 
-    public Long getIdAluno() {
-        return idAluno;
+    public RespostaForm(Long idAluno, Long idAvaliacao, String descricao) {
+        this.idAluno = idAluno;
+        this.idAvaliacao = idAvaliacao;
+        this.descricao = descricao;
     }
 
-    public void setIdAluno(Long idAluno) {
-        this.idAluno = idAluno;
+    public Long getIdAluno() {
+        return idAluno;
     }
 
     public Long getIdAvaliacao() {
         return idAvaliacao;
     }
 
-    public void setIdAvaliacao(Long idAvaliacao) {
-        this.idAvaliacao = idAvaliacao;
-    }
-
     public String getDescricao() {
         return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public Resposta toEntity() {
