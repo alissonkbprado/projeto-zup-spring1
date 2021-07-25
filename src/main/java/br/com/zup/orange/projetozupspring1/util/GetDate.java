@@ -1,13 +1,10 @@
-package br.com.zup.orange.projetozupspring1.Util;
+package br.com.zup.orange.projetozupspring1.util;
 
-import javax.servlet.ServletException;
 import javax.xml.crypto.Data;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 
 public class GetDate {

@@ -11,4 +11,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     List<Aluno> findByNome(String nome);
 
     Page<Aluno> findByNome(String nome, Pageable paginacao);
+
+    //verifica se existe Aluno com registro na tabela de respostas
+    boolean existsByRespostasListAlunoId(Long id);
 }

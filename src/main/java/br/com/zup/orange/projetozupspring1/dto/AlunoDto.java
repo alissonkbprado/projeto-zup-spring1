@@ -1,6 +1,6 @@
 package br.com.zup.orange.projetozupspring1.dto;
 
-import br.com.zup.orange.projetozupspring1.Util.GetDate;
+import br.com.zup.orange.projetozupspring1.util.GetDate;
 import br.com.zup.orange.projetozupspring1.modelo.Aluno;
 import org.springframework.data.domain.Page;
 

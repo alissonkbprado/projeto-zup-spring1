@@ -3,14 +3,19 @@ package br.com.zup.orange.projetozupspring1.controller;
 import br.com.zup.orange.projetozupspring1.dto.AlunoDto;
 import br.com.zup.orange.projetozupspring1.form.AlunoForm;
 import br.com.zup.orange.projetozupspring1.modelo.Aluno;
+import br.com.zup.orange.projetozupspring1.modelo.Avaliacao;
+import br.com.zup.orange.projetozupspring1.modelo.Resposta;
 import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
+import br.com.zup.orange.projetozupspring1.repository.RespostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +32,9 @@ public class AlunoController {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private RespostaRepository respostaRepository;
 
     @GetMapping
     @Cacheable(value = "listaDeAlunos")
@@ -45,17 +53,23 @@ public class AlunoController {
         }
 
         return AlunoDto.converter(alunoList);
+
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AlunoDto> detalhar(@PathVariable Long id) {
         Optional<Aluno> alunoOptional = alunoRepository.findById(id);
 
+        //Verifica se existe registro de Aluno na tabela de respostas
+//       boolean existe = respostaRepository.existsByAlunoId(id);
+
         if(alunoOptional.isPresent()){
             return ResponseEntity.ok(new AlunoDto(alunoOptional.get()));
         } else {
             return ResponseEntity.notFound().build();
         }
+
+
     }
 
     @CacheEvict(value = "listaDeAlunos", allEntries = true)

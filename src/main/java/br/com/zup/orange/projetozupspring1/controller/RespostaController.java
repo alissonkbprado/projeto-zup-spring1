@@ -7,8 +7,9 @@ import br.com.zup.orange.projetozupspring1.modelo.Resposta;
 import br.com.zup.orange.projetozupspring1.repository.AlunoRepository;
 import br.com.zup.orange.projetozupspring1.repository.AvaliacaoRepository;
 import br.com.zup.orange.projetozupspring1.repository.RespostaRepository;
-import br.com.zup.orange.projetozupspring1.service.EnviaEmailService;
+import br.com.zup.orange.projetozupspring1.service.EnviaEmail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,13 +34,13 @@ public class RespostaController {
     private AlunoRepository alunoRepository;
 
     @Autowired
-    EnviaEmailService enviaEmailService;
-
-    @Autowired
     private Environment environment;
 
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
+
+    @Autowired
+    private EnviaEmail enviaEmail;
 
     @GetMapping
     public Page<RespostaTodosDto>  lista(@PageableDefault(sort = "id",
@@ -71,11 +72,14 @@ public class RespostaController {
 
         Aluno aluno = alunoRepository.findById(resposta.getAluno().getId()).get();
 
-        if(profile.contains("prod")){
-            enviaEmailService.enviEmail(aluno.getEmail());
-        } else {
-            System.out.println("Teste envio de email: " + aluno.getEmail());
-        }
+
+        enviaEmail.envia(aluno.getEmail());
+
+//        if(profile.contains("prod")){
+//            enviaEmailService.envia(aluno.getEmail());
+//        } else {
+//            System.out.println("Teste envio de email: " + aluno.getEmail());
+//        }
 
         return ResponseEntity.status(201).build();
 
