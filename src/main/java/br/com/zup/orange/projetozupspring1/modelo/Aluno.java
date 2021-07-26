@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Aluno {
     private Long id;
     @NotBlank
     @Length(max = 30)
+    @Size(max = 30)
     private String nome;
     @NotBlank @Email
     @Length(max = 30)
